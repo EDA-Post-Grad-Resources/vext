@@ -19,12 +19,32 @@ func main() {
     app.Get("/", func(c *fiber.Ctx) error {
         // Render index
         todos := db.GetTodos() 
-       log.Println(todos) 
+        
         return c.Render("index", fiber.Map{
             "Title": "Hello, World!",
             "todos": todos,
                 
         }, "layouts/main")
+    })
+
+
+
+    app.Get("/add", func (c *fiber.Ctx) error {
+              
+        return c.Render("add", fiber.Map{
+        }, "layouts/main")
+ 
+    })
+
+    app.Post("/add", func (c* fiber.Ctx)error {
+         todo :=new(db.TodoDraft)
+
+        if err:= c.BodyParser(todo); err != nil {
+            return err
+        }
+
+       db.AddTodo(todo) 
+       return c.Redirect("/") 
     })
 
     log.Fatal(app.Listen(":3000"))

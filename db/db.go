@@ -11,6 +11,10 @@ type Todo struct  {
   Task string
 }
 
+type TodoDraft struct {
+  Task string `form:"task"`
+}
+
 func GetTodos() []Todo {
   db, err := sql.Open("sqlite3", "./db/dev.sqlite3")
 
@@ -48,4 +52,28 @@ func GetTodos() []Todo {
   }
 
   return todos
+}
+
+func AddTodo(newTodo *TodoDraft) int64 {
+  db, err := sql.Open("sqlite3", "./db/dev.sqlite3")
+
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  defer db.Close()
+
+  result, err := db.Exec("INSERT INTO todos(task) VALUES(?);", newTodo.Task)
+ 
+  id, err := result.LastInsertId()
+
+  if err != nil {
+    panic(err)
+  }
+  
+  if err != nil {
+        log.Fatal(err)
+    }
+
+  return id
 }
