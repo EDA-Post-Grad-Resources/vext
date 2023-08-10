@@ -1,0 +1,10 @@
+root = "."
+tmp_dir = "tmp"
+
+[build]
+  cmd = "go build -o ./tmp/main ."
+  bin = "./tmp/main"
+  log = "build-errors.log"
+
+  include_ext = ["go", "html", "tmpl", "hbs", "yaml", "css"]
+  delay = 500
