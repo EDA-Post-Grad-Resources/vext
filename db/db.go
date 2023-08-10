@@ -1,9 +1,10 @@
 package db
 
 import (
-  "log"
-  "database/sql"
-  _ "github.com/mattn/go-sqlite3"
+	"database/sql"
+	"log"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 type Todo struct  {
@@ -76,4 +77,22 @@ func AddTodo(newTodo *TodoDraft) int64 {
     }
 
   return id
+}
+
+func Delete(id int) {
+ db, err := sql.Open("sqlite3", "./db/dev.sqlite3")
+
+ if err != nil {
+    log.Fatal(err)
+  }
+
+  defer db.Close()
+
+  _, err = db.Exec("DELETE FROM todos WHERE id = ?;", id)
+
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  return
 }
