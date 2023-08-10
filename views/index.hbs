@@ -1,8 +1,25 @@
-<div>
-  <a href="/add">Add</a>
-  {{#each todos}}
-    <p>{{id}} {{task}}</p>
-  {{else}}
-    <p class="empty">No content</p>
-  {{/each}}
+<div class='flex flex-col gap-2'>
+  <a
+    href='/add'
+    class='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-20'
+  >Add</a>
+  <ul class='flex flex-col gap-4'>
+    {{#each todos}}
+      <div class='grid grid-cols-2'>
+        <p>{{task}}</p>
+        <div id='controls' class='flex gap-2'>
+          <a
+            href='/edit/{{id}}'
+            class='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+          >Edit</a>
+          <a
+            href='/delete/{{id}}'
+            class='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+          >Delete</a>
+        </div>
+      </div>
+    {{else}}
+      <p class='empty'>No content</p>
+    {{/each}}
+  </ul>
 </div>
