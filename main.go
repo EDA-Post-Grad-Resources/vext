@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"myContacts/db"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/handlebars/v2"
@@ -44,6 +45,20 @@ func main() {
        db.AddTodo(todo) 
        return c.Redirect("/") 
     })
+
+    app.Post("/delete/:id", func (c *fiber.Ctx)error {
+        inputId := c.Params("id")
+
+        // convert string to int
+        id, err := strconv.Atoi(inputId)
+        if err != nil {
+            return err
+        }
+
+        db.Delete(id)
+        return c.Redirect("/") 
+    })
+
 
     log.Fatal(app.Listen(":3000"))
 }
