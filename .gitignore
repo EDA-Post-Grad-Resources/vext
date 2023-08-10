@@ -1,3 +1,4 @@
 tmp/
 tmp
 public/output.css
+db/dev.sqlite3
