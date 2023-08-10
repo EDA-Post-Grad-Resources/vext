@@ -2,3 +2,4 @@ tmp/
 tmp
 public/output.css
 db/dev.sqlite3
+public/styles/output.css
