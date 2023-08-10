@@ -2,10 +2,11 @@ package main
 
 import (
 	"log"
+	"myContacts/db"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/handlebars/v2"
-	_ "github.com/mattn/go-sqlite3" 
-	"myContacts/db"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
@@ -14,7 +15,6 @@ func main() {
         Views: engine,
     })
 	app.Static("/", "./public")
-    
     
     app.Get("/", func(c *fiber.Ctx) error {
         // Render index
@@ -26,8 +26,6 @@ func main() {
                 
         }, "layouts/main")
     })
-
-
 
     app.Get("/add", func (c *fiber.Ctx) error {
               
