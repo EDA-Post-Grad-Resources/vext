@@ -73,7 +73,7 @@ func main() {
         return c.Render("edit", fiber.Map{
             "todo": db.Todo{
                 Id: todo.Id,
-                Task: "3343",
+                Task:todo.Task,
             },
         }, "layouts/main")
     })
