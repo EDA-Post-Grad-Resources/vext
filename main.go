@@ -3,12 +3,11 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"html/template"
-	"log"
-
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"gopkg.in/olahol/melody.v1"
+	"html/template"
+	"log"
 )
 
 func main() {
@@ -25,13 +24,20 @@ func main() {
 	})
 
 	m.HandleConnect(func(s *melody.Session) {
-		// Log or take other actions when a user connects
 		fmt.Println("User connected:", s.Request.RemoteAddr)
+		s.Set("userId", "1234")
 	})
 
 	m.HandleMessage(func(s *melody.Session, msg []byte) {
-		cookies := s.Request.Cookies()
-		fmt.Println(cookies)
+
+		// Get the user ID from the session
+		value, exists := s.MustGet("userId").(string)
+		if !exists {
+			log.Fatal("User ID not found")
+			return
+		}
+		fmt.Println("User ID:", value)
+
 		// Define the dynamic data
 		data := struct {
 			User    string
