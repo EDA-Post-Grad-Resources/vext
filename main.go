@@ -1,9 +1,10 @@
 package main
 
 import (
-	// static "github.com/gin-contrib/static"
+	"bytes"
 	"github.com/gin-gonic/gin"
 	"gopkg.in/olahol/melody.v1"
+	"html/template"
 )
 
 func main() {
@@ -20,14 +21,38 @@ func main() {
 	})
 
 	m.HandleMessage(func(s *melody.Session, msg []byte) {
-		htmlString := `<h1>Hello</h1>`
-		m.Broadcast([]byte(htmlString))
+		// Define the dynamic data
+		data := struct {
+			Header  string
+			Content string
+		}{
+			Header:  "Hello",
+			Content: "This is the main page.",
+		}
+
+		// Parse the HTML template
+		tmpl, err := template.ParseFiles("templates/message.html")
+		if err != nil {
+			// Handle error
+			return
+		}
+
+		// Render the template with the data
+		var renderedHTML bytes.Buffer
+		err = tmpl.Execute(&renderedHTML, data)
+		if err != nil {
+			// Handle error
+			return
+		}
+
+		// Broadcast the rendered HTML
+		m.Broadcast(renderedHTML.Bytes())
 	})
 
 	r.GET("/", func(c *gin.Context) {
 		// Render the "index.html" template, passing in a map of data
 		c.HTML(200, "index.html", gin.H{
-			"Title":   "My Gin Website",
+			"Title":   "Vext",
 			"Header":  "Welcome!",
 			"Content": "This is the main page.",
 		})
