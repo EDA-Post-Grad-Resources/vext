@@ -2,16 +2,18 @@ package main
 
 import (
 	"bytes"
+	"html/template"
+
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"gopkg.in/olahol/melody.v1"
-	"html/template"
 )
 
 func main() {
 	r := gin.Default()
 	m := melody.New()
 
-	// r.Use(static.Serve("/", static.LocalFile("./public", true)))
+	r.Use(static.Serve("/public", static.LocalFile("./public", true)))
 
 	// Load templates from the "templates" directory
 	r.LoadHTMLGlob("templates/*")
