@@ -68,11 +68,7 @@ func main() {
 
 	r.GET("/", func(c *gin.Context) {
 		// Render the "index.html" template, passing in a map of data
-		c.HTML(200, "index.html", gin.H{
-			"Title":   "Vext",
-			"Header":  "Welcome!",
-			"Content": "This is the main page.",
-		})
+		c.HTML(200, "index.html", gin.H{})
 	})
 
 	r.Run(":3000")
