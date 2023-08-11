@@ -59,6 +59,44 @@ func main() {
         return c.Redirect("/") 
     })
 
+    app.Get("/edit/:id", func (c *fiber.Ctx)error {
+        inputId := c.Params("id")
+
+        // convert string to int
+        id, err := strconv.Atoi(inputId)
+        if err != nil {
+            return err
+        }
+
+        todo := db.GetTodoById(id)
+        log.Println(todo)
+        return c.Render("edit", fiber.Map{
+            "todo": db.Todo{
+                Id: todo.Id,
+                Task: "3343",
+            },
+        }, "layouts/main")
+    })
+
+    app.Post("/edit/:id", func (c *fiber.Ctx)error {
+        inputId := c.Params("id")
+
+        // convert string to int
+        id, err := strconv.Atoi(inputId)
+        if err != nil {
+            return err
+        }
+
+        todo :=new(db.TodoDraft)
+
+        if err:= c.BodyParser(todo); err != nil {
+            return err
+        }
+
+        db.UpdateTodo(id, todo)
+        return c.Redirect("/")
+    })
+
 
     log.Fatal(app.Listen(":3000"))
 }

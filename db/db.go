@@ -96,3 +96,50 @@ func Delete(id int) {
 
   return
 }
+
+func GetTodoById(id int) Todo {
+  db, err := sql.Open("sqlite3", "./db/dev.sqlite3")
+
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  defer db.Close()
+
+  rows, err := db.Query("SELECT id, task FROM todos WHERE id = ?;", id)
+
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  defer rows.Close()
+
+  var todo Todo
+
+  for rows.Next() {
+    err := rows.Scan(&todo.Id, &todo.Task)
+
+    if err != nil {
+      log.Fatal(err)
+    }
+  }
+  return todo
+}
+
+func UpdateTodo(id int, todo *TodoDraft) {
+  db, err := sql.Open("sqlite3", "./db/dev.sqlite3")
+
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  defer db.Close()
+
+  _, err = db.Exec("UPDATE todos SET task = ? WHERE id = ?;", todo.Task, id)
+
+  if err != nil {
+    log.Fatal(err)
+  }
+
+  return
+}
