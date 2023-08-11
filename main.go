@@ -2,7 +2,9 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"html/template"
+	"log"
 
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
@@ -22,20 +24,27 @@ func main() {
 		m.HandleRequest(c.Writer, c.Request)
 	})
 
+	m.HandleConnect(func(s *melody.Session) {
+		// Log or take other actions when a user connects
+		fmt.Println("User connected:", s.Request.RemoteAddr)
+	})
+
 	m.HandleMessage(func(s *melody.Session, msg []byte) {
+		cookies := s.Request.Cookies()
+		fmt.Println(cookies)
 		// Define the dynamic data
 		data := struct {
-			Header  string
+			User    string
 			Content string
 		}{
-			Header:  "Hello",
-			Content: "This is the main page.",
+			User:    "User1234",
+			Content: string(msg),
 		}
 
 		// Parse the HTML template
 		tmpl, err := template.ParseFiles("templates/message.html")
 		if err != nil {
-			// Handle error
+			log.Fatal(err)
 			return
 		}
 
@@ -43,7 +52,7 @@ func main() {
 		var renderedHTML bytes.Buffer
 		err = tmpl.Execute(&renderedHTML, data)
 		if err != nil {
-			// Handle error
+			log.Fatal(err)
 			return
 		}
 
