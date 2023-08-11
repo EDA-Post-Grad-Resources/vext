@@ -4,5 +4,6 @@ This is a simple project to demonstrate how to use websockets using go by buildi
 
 ## Roadmap
 
-- [ ] configure a websocket server
+- [x] configure a websocket server
+- [ ] configure html templates
 - [ ] Design css/styling
