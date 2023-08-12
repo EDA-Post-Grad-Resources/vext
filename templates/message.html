@@ -1,5 +1,10 @@
 <div id="messages" hx-swap-oob="afterend" data-test="message">
   <div class="mt-2">
-    <p class="text-left text-zinc-900">[{{ .User }}] {{ .Content }}</p>
+    <p class="text-left text-zinc-900">
+      <span style="color: hsl({{ .Color}}, 99%, 20%)"
+        >[{{.Color}}{{ .User }}]</span
+      >
+      {{ .Content }}
+    </p>
   </div>
 </div>
