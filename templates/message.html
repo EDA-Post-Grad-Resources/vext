@@ -1,11 +1,14 @@
-<div id="messages" hx-swap-oob="beforeend" class="flex flex-row">
-  <div class="mt-2">
-    <p class="font-mono text-left text-green-400 font-bold">
-      <span class="font-mono text-xs" style="color: hsl({{ .Color}}, 99%, 70%)"
+<div id="messages" hx-swap-oob="beforeend">
+  <div class="flex text-green-400 font-mono justify-around">
+    <p class="grow text-green-400 font-bold">
+      <span
+        class="font-mono text-xs font-thin"
+        style="color: hsl({{ .Color}}, 99%, 70%)"
         >[{{ .User }}]</span
       >
-      <span class="font-mono text-xs text-green-400">({{ .Time }})</span>
       {{ .Content }}
     </p>
+
+    <p class="flex-none font-mono text-xs text-green-800">{{ .Time }}</p>
   </div>
 </div>
