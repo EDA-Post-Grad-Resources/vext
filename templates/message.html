@@ -1,5 +1,5 @@
-<div id="messages">
-  <div id="message" hx-swap-oob="beforebegin">
+<div id="messages" hx-swap-oob="afterbegin" data-test="message">
+  <div class="border rounded-xl p-4 border-zinc-200 shadow-zinc-100 m-10">
     <h2>{{ .User }}</h2>
     <p>{{ .Content }}</p>
   </div>

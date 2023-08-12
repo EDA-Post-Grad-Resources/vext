@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="public/styles/output.css" />
     <script src="https://unpkg.com/htmx.org@1.9.4"></script>
     <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
+    <script src="https://unpkg.com/hyperscript.org@0.9.11"></script>
   </head>
   <body class="min-h-screen text-zinc-50 bg-zinc-800 w-1/2 mx-auto">
     <div
@@ -12,7 +13,7 @@
       hx-ext="ws"
       ws-connect="/ws"
     >
-      <form class="flex gap-4" ws-send>
+      <form class="flex gap-4" ws-send _="on submit reset() me">
         <input
           id="user-message"
           type="text"
@@ -22,9 +23,9 @@
         />
         <button id="send-message">Send</button>
       </form>
-      <div id="messages">
-        <div id="message"></div>
-      </div>
+      <main class="flex flex-col gap-4">
+        <div id="messages" data-test="index"></div>
+      </main>
     </div>
   </body>
 </html>
