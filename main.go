@@ -55,8 +55,6 @@ func main() {
 		}
 		fmt.Println("User ID: ", userMessage.Content, userId)
 
-		fmt.Println("color", stringToHSL(userId))
-
 		// Define the dynamic data
 		data := struct {
 			User    string
@@ -65,7 +63,7 @@ func main() {
 		}{
 			User:    userId,
 			Content: userMessage.Content,
-			Color:   stringToHSL(userId),
+			Color:   stringToHue(userId),
 		}
 
 		// Parse the HTML template
@@ -95,7 +93,7 @@ func main() {
 	r.Run(":3000")
 }
 
-func stringToHSL(name string) string {
+func stringToHue(name string) string {
 	hash := 0
 
 	// Hash the name by summing the ASCII values of its characters
