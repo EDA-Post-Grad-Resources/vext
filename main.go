@@ -58,10 +58,12 @@ func main() {
 			User    string
 			Content string
 			Color   string
+			Time    string
 		}{
 			User:    userId,
 			Content: userMessage.Content,
 			Color:   stringToHue(userId),
+			Time:    time.Now().Format("15:04:05"),
 		}
 
 		// Parse the HTML template
@@ -80,7 +82,6 @@ func main() {
 		}
 
 		// Broadcast the rendered HTML
-		m.Broadcast(renderedHTML.Bytes())
 	})
 
 	r.GET("/", func(c *gin.Context) {
