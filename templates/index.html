@@ -6,6 +6,7 @@
     <script src="https://unpkg.com/htmx.org@1.9.4"></script>
     <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
     <script src="https://unpkg.com/hyperscript.org@0.9.11"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
   <body class="min-h-screen text-zinc-50 bg-zinc-800 w-1/2 mx-auto">
     <div
@@ -13,17 +14,21 @@
       hx-ext="ws"
       ws-connect="/ws"
     >
-      <form class="flex gap-4" ws-send _="on submit reset() me">
+      <form class="flex gap-4 w-full" ws-send _="on submit reset() me">
         <input
           id="user-message"
           type="text"
           name="userMessage"
-          class="text-zinc-900 p-1"
+          class="text-zinc-900 p-1 w-full"
           autocomplete="off"
+          value="Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim"
         />
         <button id="send-message">Send</button>
       </form>
-      <main class="flex flex-col gap-4">
+      <main
+        class="bg-zinc-50 p-2 rounded w-full overflow-y-auto"
+        style="height: 80vh"
+      >
         <div id="messages" data-test="index"></div>
       </main>
     </div>
