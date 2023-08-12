@@ -7,6 +7,7 @@ import (
 	"html/template"
 	"log"
 
+	"github.com/brianvoe/gofakeit/v6"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"gopkg.in/olahol/melody.v1"
@@ -26,8 +27,11 @@ func main() {
 	})
 
 	m.HandleConnect(func(s *melody.Session) {
-		fmt.Println("User connected:", s.Request.RemoteAddr)
-		s.Set("userId", "1234")
+		// generate a random user ID
+		userId := gofakeit.Name()
+		// set the user ID on the session
+		s.Set("userId", userId)
+		fmt.Println(s.Request.RemoteAddr + " has been assigned to " + userId)
 	})
 
 	m.HandleMessage(func(s *melody.Session, msg []byte) {
@@ -44,19 +48,19 @@ func main() {
 		}
 
 		// Get the user ID from the session
-		value, exists := s.MustGet("userId").(string)
+		userId, exists := s.MustGet("userId").(string)
 		if !exists {
 			log.Fatal("User ID not found")
 			return
 		}
-		fmt.Println("User ID: ", userMessage.Content, value)
+		fmt.Println("User ID: ", userMessage.Content, userId)
 
 		// Define the dynamic data
 		data := struct {
 			User    string
 			Content string
 		}{
-			User:    "User1234",
+			User:    userId,
 			Content: userMessage.Content,
 		}
 
