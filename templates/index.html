@@ -20,21 +20,20 @@
         id="messages"
       ></main>
 
-      <form class="flex gap-4 w-full" ws-send _="on submit reset() me">
+      <form
+        class="flex gap-0 w-full items-center bg-black text-green-500 font-mono"
+        ws-send
+        _="on submit reset() me"
+      >
+        <p class="flex-none">hacker@victim:/ws/channel$</p>
         <input
           id="user-message"
           type="text"
           name="userMessage"
-          class="p-2 bg-black text-green-500 border-2 border-green-400 font-mono focus:shadow-green-100 border-transparent placeholder-white focus:outline-none block w-full rounded text-sm'"
+          class="grow p-2 bg-black text-green-500 border-2 border-green-400 font-mono focus:shadow-green-100 border-transparent placeholder-white focus:outline-none block w-full rounded text-sm'"
           autocomplete="off"
-          value="Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim"
+          value=""
         />
-        <button
-          id="send-message"
-          class="border-2 bg-black font-mono rounded border-green-400 shadow drop-shadow-lg px-4 hover:shadow hover:drop-shadow-4xl hover:shadow-green-100 text-green-400"
-        >
-          Send
-        </button>
       </form>
     </div>
   </body>
