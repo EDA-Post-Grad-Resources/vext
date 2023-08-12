@@ -53,8 +53,6 @@ func main() {
 			log.Fatal("User ID not found")
 			return
 		}
-		fmt.Println("User ID: ", userMessage.Content, userId)
-
 		// Define the dynamic data
 		data := struct {
 			User    string
