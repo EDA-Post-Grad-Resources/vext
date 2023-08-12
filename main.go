@@ -2,12 +2,14 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
+	"html/template"
+	"log"
+
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"gopkg.in/olahol/melody.v1"
-	"html/template"
-	"log"
 )
 
 func main() {
@@ -30,13 +32,24 @@ func main() {
 
 	m.HandleMessage(func(s *melody.Session, msg []byte) {
 
+		// parse the message into an object that has userMessage property
+		var userMessage struct {
+			Content string `json:"userMessage"`
+		}
+		// unmarshal the message into the object
+		err := json.Unmarshal(msg, &userMessage)
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
+
 		// Get the user ID from the session
 		value, exists := s.MustGet("userId").(string)
 		if !exists {
 			log.Fatal("User ID not found")
 			return
 		}
-		fmt.Println("User ID:", value)
+		fmt.Println("User ID: ", userMessage.Content, value)
 
 		// Define the dynamic data
 		data := struct {
@@ -44,7 +57,7 @@ func main() {
 			Content string
 		}{
 			User:    "User1234",
-			Content: string(msg),
+			Content: userMessage.Content,
 		}
 
 		// Parse the HTML template

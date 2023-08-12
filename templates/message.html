@@ -1,2 +1,6 @@
-<h2>{{ .User }}</h2>
-<p>{{ .Content }}</p>
+<div id="messages">
+  <div id="message" hx-swap-oob="beforebegin">
+    <h2>{{ .User }}</h2>
+    <p>{{ .Content }}</p>
+  </div>
+</div>
