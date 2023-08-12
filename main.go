@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"html/template"
 	"log"
-
 	"github.com/brianvoe/gofakeit/v6"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
@@ -82,6 +81,7 @@ func main() {
 		}
 
 		// Broadcast the rendered HTML
+		m.Broadcast(renderedHTML.Bytes())
 	})
 
 	r.GET("/", func(c *gin.Context) {
