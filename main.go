@@ -30,9 +30,9 @@ func broadcast(m *melody.Melody, action string, userId string, msg string) {
 		}
 
 		// Parse the HTML template
-		tmpl, err := template.ParseFiles("templates/message.html")
+		tmpl, err := template.ParseFiles("templates/"+ action +".html")
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("template parsing error: ", err)
 			return
 		}
 
