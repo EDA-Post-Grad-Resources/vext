@@ -15,37 +15,37 @@ import (
 )
 
 func broadcast(m *melody.Melody, action string, userId string, msg string) {
-	
-		// Define the dynamic data
-		data := struct {
-			User    string
-			Content string
-			Color   string
-			Time    string
-		}{
-			User:		userId,
-			Content: msg,
-			Color:   stringToHue(userId),
-			Time:    time.Now().Format("15:04:05"),
-		}
 
-		// Parse the HTML template
-		tmpl, err := template.ParseFiles("templates/"+ action +".html")
-		if err != nil {
-			log.Fatal("template parsing error: ", err)
-			return
-		}
+	// Define the dynamic data
+	data := struct {
+		User    string
+		Content string
+		Color   string
+		Time    string
+	}{
+		User:    userId,
+		Content: msg,
+		Color:   stringToHue(userId),
+		Time:    time.Now().Format("15:04:05"),
+	}
 
-		// Render the template with the data
-		var renderedHTML bytes.Buffer
-		err = tmpl.Execute(&renderedHTML, data)
-		if err != nil {
-			log.Fatal(err)
-			return
-		}
+	// Parse the HTML template
+	tmpl, err := template.ParseFiles("templates/" + action + ".html")
+	if err != nil {
+		log.Fatal("template parsing error: ", err)
+		return
+	}
 
-		// Broadcast the rendered HTML
-		m.Broadcast(renderedHTML.Bytes())
+	// Render the template with the data
+	var renderedHTML bytes.Buffer
+	err = tmpl.Execute(&renderedHTML, data)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
+	// Broadcast the rendered HTML
+	m.Broadcast(renderedHTML.Bytes())
 }
 
 func main() {
@@ -90,8 +90,8 @@ func main() {
 			log.Fatal("User ID not found")
 			return
 		}
-		
-		broadcast(m,"message", userId, userMessage.Content)
+
+		broadcast(m, "message", userId, userMessage.Content)
 	})
 
 	r.GET("/", func(c *gin.Context) {
