@@ -1,13 +1,11 @@
 <div id="messages" hx-swap-oob="beforeend">
-  <div class="flex text-green-400 font-mono justify-around">
-    <p class="grow text-green-400 font-bold">
-      <span
-        class="font-mono text-xs font-thin"
-        style="color: hsl({{ .Color}}, 99%, 70%)"
-        >[{{ .User }}]</span
-      >
-      {{ .Content }}
-    </p>
+  <div class="flex text-green-400 font-mono justify-around items-center">
+    <span
+      class="font-mono text-xs font-thin"
+      style="color: hsl({{ .Color}}, 99%, 70%)"
+      >[{{ .User }}]</span
+    >
+    <p class="grow text-green-400 font-bold">{{ .Content }}</p>
 
     <p class="flex-none font-mono text-xs text-green-800">{{ .Time }}</p>
   </div>
