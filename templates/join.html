@@ -1,0 +1,7 @@
+<div id="messages" hx-swap-oob="beforeend">
+    <div class="flex font-mono justify-around items-center">
+        <span class="mr-2 font-mono text-xs font-thin" style="color: hsl({{ .Color}}, 99%, 70%)">[{{ .User }}]</span>
+        <p class="grow text-green-800 font-bold">{{ .Content }}</p>
+        <p class="flex-none font-mono text-xs text-green-800">{{ .Time }}</p>
+    </div>
+</div>
