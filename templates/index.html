@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>{{ .Title }}</title>
+  <title>The Nest</title>
   <link rel="stylesheet" href="public/styles/output.css" />
   <script src="https://unpkg.com/htmx.org@1.9.4"></script>
   <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
@@ -16,7 +16,7 @@
     </main>
 
     <form class="flex gap-0 px-2 w-full items-center text-green-500 font-mono" ws-send _="on submit reset() me">
-      <p class="flex-none font-bold">victim@196.168.1.100:/ws/chat$</p>
+      <p class="flex-none font-bold" id="avatar"></p>
       <input id="user-message" type="text" name="userMessage"
         class="grow p-2 bg-black text-green-500  font-mono focus:shadow-green-100  focus:outline-none block w-full text-sm"
         autocomplete="off" autofocus />

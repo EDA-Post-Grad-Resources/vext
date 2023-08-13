@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"html/template"
 	"log"
+	"strings"
 	"time"
 
 	"github.com/brianvoe/gofakeit/v6"
@@ -14,23 +15,25 @@ import (
 	"gopkg.in/olahol/melody.v1"
 )
 
-func broadcast(m *melody.Melody, action string, userId string, msg string) {
+func broadcast(m *melody.Melody, sessions []*melody.Session, isSender bool, userId string, msg string) {
 
 	// Define the dynamic data
 	data := struct {
-		User    string
-		Content string
-		Color   string
-		Time    string
+		User     string
+		Content  string
+		Color    string
+		Time     string
+		IsSender bool
 	}{
-		User:    userId,
-		Content: msg,
-		Color:   stringToHue(userId),
-		Time:    time.Now().Format("15:04:05"),
+		User:     userId,
+		Content:  msg,
+		Color:    stringToHue(userId),
+		Time:     time.Now().Format("15:04:05"),
+		IsSender: isSender,
 	}
 
 	// Parse the HTML template
-	tmpl, err := template.ParseFiles("templates/" + action + ".html")
+	tmpl, err := template.ParseFiles("templates/message.html")
 	if err != nil {
 		log.Fatal("template parsing error: ", err)
 		return
@@ -44,8 +47,34 @@ func broadcast(m *melody.Melody, action string, userId string, msg string) {
 		return
 	}
 
+	// loop through the sessions
+	for _, s := range sessions {
+		// get the user ID from the session
+		userId, _ := s.MustGet("userId").(string)
+		fmt.Println("Sending message to " + userId)
+	}
+
 	// Broadcast the rendered HTML
-	m.Broadcast(renderedHTML.Bytes())
+	m.BroadcastMultiple(renderedHTML.Bytes(), sessions)
+}
+
+func getOtherSessions(sessions []*melody.Session, session *melody.Session) []*melody.Session {
+	var otherSessions []*melody.Session
+	for _, s := range sessions {
+		if s != session {
+			otherSessions = append(otherSessions, s)
+		}
+	}
+	return otherSessions
+}
+
+func getInitials(fullName string) string {
+	names := strings.Split(fullName, " ")
+	if len(names) < 2 {
+		return "Invalid name"
+	}
+	initials := string(names[0]) + "-" + string(names[1])
+	return strings.ToLower(initials)
 }
 
 func main() {
@@ -61,6 +90,9 @@ func main() {
 		m.HandleRequest(c.Writer, c.Request)
 	})
 
+	// create an empty slice of sessions
+	var sessions []*melody.Session
+
 	m.HandleConnect(func(s *melody.Session) {
 		// generate a random user ID
 		userId := gofakeit.Name()
@@ -68,7 +100,34 @@ func main() {
 		s.Set("userId", userId)
 		fmt.Println(s.Request.RemoteAddr + " has been assigned to " + userId)
 
-		broadcast(m, "join", userId, "has joined the chat")
+		// add the session to the slice
+		sessions = append(sessions, s)
+		otherSessions := getOtherSessions(sessions, s)
+
+		broadcast(m, otherSessions, false, userId, " has joined the chat")
+		broadcast(m, []*melody.Session{s}, true, userId, "joined the chat")
+
+		initials := getInitials(userId)
+		m.BroadcastMultiple([]byte("<p class='flex-none font-bold' id='avatar'>"+initials+"@chat$</p> "), []*melody.Session{s})
+	})
+
+	m.HandleDisconnect(func(s *melody.Session) {
+		// delete the session from the slice
+		for i, session := range sessions {
+			if session == s {
+				sessions = append(sessions[:i], sessions[i+1:]...)
+				break
+			}
+		}
+
+		// Get the user ID from the session
+		userId, exists := s.MustGet("userId").(string)
+		if !exists {
+			log.Fatal("User ID not found")
+			return
+		}
+
+		broadcast(m, []*melody.Session{s}, true, userId, "left the chat")
 	})
 
 	m.HandleMessage(func(s *melody.Session, msg []byte) {
@@ -91,7 +150,10 @@ func main() {
 			return
 		}
 
-		broadcast(m, "message", userId, userMessage.Content)
+		otherSessions := getOtherSessions(sessions, s)
+
+		broadcast(m, []*melody.Session{s}, true, userId, userMessage.Content)
+		broadcast(m, otherSessions, false, userId, userMessage.Content)
 	})
 
 	r.GET("/", func(c *gin.Context) {
