@@ -127,7 +127,8 @@ func main() {
 			return
 		}
 
-		broadcast(m, []*melody.Session{s}, true, userId, "left the chat")
+		otherSessions := getOtherSessions(sessions, s)
+		broadcast(m, otherSessions, false, userId, "left the chat")
 	})
 
 	m.HandleMessage(func(s *melody.Session, msg []byte) {
